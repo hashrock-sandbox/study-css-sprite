@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Sushi Loading</title>
+	<style>
+		.character {
+			background-image: url(./sushi_sprite.png);
+			height: 434px;
+			width: 180px;
+			transform:scale(0.5);
+			position: absolute;
+		}
+		
+		header{
+			background: white;
+			margin-bottom: 50px;
+		}
+		body{
+			margin: 0;
+		}
+		
+		h1{
+			margin: 0;
+			font-size: 1.5rem;
+			padding: 4rem;
+			text-align: center;
+			color: gray;
+			font-weight: 100;
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		}
+		.container{
+			width: 400px;
+			height: 400px;
+			background: white;
+			margin: 0 auto;
+			position: relative;
+			overflow: hidden;
+			border-radius: 10px;
+			box-shadow: 0px 1px 1px 0px black;
+		}
+		
+		body{
+			background: #DE8686;
+		}
+		
+		footer{
+			text-align: center;
+			color: white;
+		}
+		img{
+			vertical-align: middle;
+			margin: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1><img src="sushicorp_logo_mini.svg" alt=""> Sushi Loading Animation</h1>
+	</header>
+	<div class="container">
+	</div>
+	<footer>
+		<p>
+			Created by Sushicorp
+		</p>
+		
+		</footer>
+	<script>
+		function frame(i){
+			return -180 * i;
+		}
+
+		function Sushi(el){
+			this.start = Date.now();
+			this.frame = 0;
+			this.el = el;
+		}
+		
+		Sushi.prototype.addFrame = function(){
+			this.frame++;
+		}
+		
+		Sushi.prototype.render = function(){
+			var time = Date.now() - this.start;
+			var i = Math.floor(time / 90);
+			
+			if(i < 5){
+				this.el.style.backgroundPosition = frame(i) + 'px 0px'
+			}
+			
+			var x = 0;
+			var y = 0;
+			if(time > 1000){
+				x = (time - 1000) / 20;
+			}
+			
+			this.el.style.right = x + "px";
+			this.el.style.top = y + "px";
+		}
+		
+		function step() {
+			sushis.forEach(function(item){
+				item.render();
+			})
+			requestAnimationFrame(step);
+		}
+		var sushis = [];
+		requestAnimationFrame(step);
+		setInterval(function(){
+			var iDiv = document.createElement('div');
+			iDiv.id = 'block';
+			iDiv.className = 'character';
+			document.querySelector(".container").appendChild(iDiv);			
+			
+			sushis.push(
+				new Sushi(iDiv)
+			)
+			
+			if(sushis.length > 4){
+				var rm = sushis.shift();
+				rm.el.remove();
+			}
+			
+			
+		}, 2000);
+		
+		
+	</script>
+</body>
+
+</html>
